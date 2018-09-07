@@ -1,0 +1,110 @@
+apply plugin: 'com.android.application'
+apply from: '../versions.gradle'
+
+
+//正式服
+def API_HOST_RELEASE = "\"http://183.214.112.114:9900/hrmw/\""
+//测试服(外网)
+def API_HOST_TEST = "\"http://183.214.112.114:9900/hrmw/\""
+//开发环境(内网)
+def API_HOST_DEV = "\"http://183.214.112.114:9900/hrmw/\""
+
+
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "com.lx.shell2"
+        minSdkVersion 15
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        official {
+            // 不显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            buildConfigField "String", "API_HOST", "${API_HOST_RELEASE}"
+            buildConfigField "boolean", "IS_DEBUG", "true"
+            shrinkResources true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            // 显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            buildConfigField "boolean", "IS_DEBUG", "true"
+            buildConfigField "String", "API_HOST", "${API_HOST_RELEASE}"
+        }
+        intranet {
+            // 显示Log  https://blog.csdn.net/u014637428/article/details/52249423?locationNum=14
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            buildConfigField "boolean", "IS_DEBUG", "true"
+            buildConfigField "String", "API_HOST", "${API_HOST_DEV}"
+            debuggable true
+        }
+        extranet {
+            // 显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            buildConfigField "boolean", "IS_DEBUG", "true"
+            buildConfigField "String", "API_HOST", "${API_HOST_TEST}"
+            debuggable true
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //support
+    implementation deps.support.annotations
+    implementation deps.support.app_compat
+    implementation deps.support.design
+    implementation deps.support.cardview
+    implementation deps.support.app_compat
+    implementation deps.constraint_layout
+    implementation deps.junit
+    implementation deps.atsl.runner
+    implementation deps.atsl.rules
+    implementation deps.espresso.core
+    implementation deps.espresso.contrib
+    implementation deps.espresso.intents
+
+    //butterknife
+    implementation deps.butterknife.runtime
+    annotationProcessor deps.butterknife.compiler
+
+
+    implementation deps.brvah
+    implementation deps.eventbus
+    implementation deps.rxpermissions
+
+    //retrofit
+    implementation deps.retrofit.runtime
+    implementation deps.retrofit.gson
+    implementation deps.retrofit.rxjava
+    implementation deps.logging_interceptor
+
+    //rxlifecycle
+    implementation deps.rxlifecycle.rxlifecycle
+    implementation deps.rxlifecycle.rxlifecycle_components
+    implementation deps.rxlifecycle.rxlifecycle_android
+//    implementation "com.squareup.okhttp3:logging-interceptor:3.8.0"
+
+    // RxJava
+    implementation deps.rx_android
+    implementation deps.rxjava2
+
+    // glide
+    implementation deps.glide.runtime
+    annotationProcessor deps.glide.compiler
+
+    // Timber
+    implementation deps.timber
+
+    //Toasty
+    implementation deps.toasty
+}
